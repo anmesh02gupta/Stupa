@@ -20,7 +20,6 @@ export class HomeComponent implements OnInit{
   }
   
   ngOnInit(): void {
-  //  this.newArrivalProducts();
   this.getcategoryList()
   this.getproduct();
   }
@@ -30,7 +29,6 @@ export class HomeComponent implements OnInit{
       this.isLoading=false;
       this.category=data;
       this.category.unshift({id:0,name:"All"});
-      console.log(this.category);
     });
   }
   gotoProductList(id:number){
@@ -39,24 +37,20 @@ export class HomeComponent implements OnInit{
     }
     if(id!=0){
       this.product=this.product.filter((item:any)=>item.id==id);
-      console.log(this.product);
     }
 
   }
   getproduct(){
     this._productService.getProduct().subscribe(data=>{
       this.product=data;
-      console.log(this.product);
     })
   }
   getproductByid(id:number){
     this._productService.getProductbyid(id).subscribe(data=>{
       this.product=data;
-      console.log(this.product);
     })
   }
   gotoProductDetail(id:number,product:any){
-    console.log(id);
     this._productService.showdata.next(product)
     this.router.navigateByUrl('/product/'+id);
 
