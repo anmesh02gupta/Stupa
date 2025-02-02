@@ -1,4 +1,5 @@
 
 export const environment={
-    baseAPIURL:'https://anish-mockapi.onrender.com/'
+    baseAPIURL:'https://api.escuelajs.co/api/v1/products',
+    categoryAPIURL:'https://api.escuelajs.co/api/v1/categories'
 }

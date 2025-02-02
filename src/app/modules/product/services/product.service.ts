@@ -10,12 +10,17 @@ import { BehaviorSubject } from 'rxjs';
 })
 
 export class ProductService {
-  private url=environment.baseAPIURL+'products';
+  private url=environment.baseAPIURL;
+  private categoryURL=environment.categoryAPIURL;
   products=new BehaviorSubject<Product[]>([]);
+  cartdata=new BehaviorSubject<any[]>([]);
+  showdata=new BehaviorSubject<any>([]);
+  cartdatalength=new BehaviorSubject<number>(0);
   ratingList:boolean[]=[];
   constructor(private http:HttpClient) { }
 
   get get():Observable<Product[]|any>{
+    // return this.http.get<{[key:string]:Product}>(this.url).pipe(map((data)=>{
     return this.http.get<{[key:string]:Product}>(this.url).pipe(map((data)=>{
       let newProducts:Product[]=[];
       for(const key in data){
@@ -38,9 +43,9 @@ export class ProductService {
       params:new HttpParams().set('type',type)
     });
   }
-  getProduct(id:number):Observable<Product>{
-    return this.http.get<Product>(this.url+'/'+id);
-  }
+  // getProduct(id:number):Observable<Product>{
+  //   return this.http.get<Product>(this.url+'/'+id);
+  // }
 
   search(query:string):Observable<Product[]>{
     return this.http.get<Product[]>(this.url,{
@@ -54,5 +59,13 @@ export class ProductService {
     });
     return this.ratingList;
   }
-  
+  getCateory(){ 
+    return this.http.get(this.categoryURL);
+  }
+  getProduct(){
+    return this.http.get(this.url);
+  }
+  getProductbyid(id:number){
+    return this.http.get(this.url+'/'+id);
+  }
 }

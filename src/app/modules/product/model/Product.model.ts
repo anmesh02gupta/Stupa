@@ -19,5 +19,13 @@ export interface Product {
       count: number;
     }
 }
+export interface Cateory {
+  creationAt: string;
+  id: number;
+  image: string;
+  name: string;
+  updatedAt: string;
+}
+
 
 

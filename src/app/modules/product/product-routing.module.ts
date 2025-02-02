@@ -1,15 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProductdetailComponent } from './components/product/productdetail/productdetail.component';
-import { ProductComponent } from './components/product/product.component';
+import { ProductdetailComponent } from './components/productdetail/productdetail.component';
 
 const routes: Routes = [
   {
     path:'',
     children:[
       {
-        path:':category',
-        component:ProductComponent,
+        path:':id',
+        component:ProductdetailComponent,
       },
       {
         path:'product/:id',

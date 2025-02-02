@@ -1,44 +1,74 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Product } from 'src/app/modules/product/model';
 import { ProductService } from 'src/app/modules/product/services/product.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styles: [
-  ]
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit{
   products:Product[]=[];
+  product:any;
   skeletons:number[]=[...new Array(6)];
   error!:string;
   isLoading=false;
-  images:string[]=[
-    // "https://images.unsplash.com/photo-1523381294911-8d3cead13475?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    // "https://www.creativefabrica.com/wp-content/uploads/2021/05/15/Quote-T-shirt-design-001-Graphics-12041380-1.jpg",
-    // "https://www.apetogentleman.com/wp-content/uploads/2022/10/graphic-tees-men-1.jpg",
-
-    "https://www.jiomart.com/images/cms/aw_rbslider/slides/1690561566_Fresh_Deals_on_Atta_and_Flours_Desktop.jpg?im=Resize=(1680,320)",
-    "https://www.jiomart.com/images/cms/aw_rbslider/slides/1690405709_Month_End_Deals_On_Daily_Essentails_Desktop.jpg?im=Resize=(1680,320)",
-    "https://www.jiomart.com/images/cms/aw_rbslider/slides/1690561220_bestsellingsmartphonesdesktop_D.jpg?im=Resize=(1680,320)",
-    "https://www.jiomart.com/images/cms/aw_rbslider/slides/1688753500_1680x320rounded.jpg?im=Resize=(1680,320)",
-
-  ];
-
-  constructor(private _productService:ProductService){
+  category:any;
+  cart: any[] = [];
+  constructor(private _productService:ProductService,private router:Router){
   }
+  
   ngOnInit(): void {
-   this.newArrivalProducts();
+  //  this.newArrivalProducts();
+  this.getcategoryList()
+  this.getproduct();
   }
-  newArrivalProducts(){
+  getcategoryList(){
     this.isLoading=true;
-    const startIndex=Math.round(Math.random()*20);
-    const lastIndex=startIndex+6;
-    this._productService.get.subscribe(data=>{
+    this._productService.getCateory().subscribe(data=>{
       this.isLoading=false;
-      this.products=data.slice(startIndex,lastIndex);
-    },
-    error=>this.error=error.message
-    );
+      this.category=data;
+      this.category.unshift({id:0,name:"All"});
+      console.log(this.category);
+    });
   }
+  gotoProductList(id:number){
+    if(id==0){
+    this.getproduct();
+    }
+    if(id!=0){
+      this.product=this.product.filter((item:any)=>item.id==id);
+      console.log(this.product);
+    }
+
+  }
+  getproduct(){
+    this._productService.getProduct().subscribe(data=>{
+      this.product=data;
+      console.log(this.product);
+    })
+  }
+  getproductByid(id:number){
+    this._productService.getProductbyid(id).subscribe(data=>{
+      this.product=data;
+      console.log(this.product);
+    })
+  }
+  gotoProductDetail(id:number,product:any){
+    console.log(id);
+    this._productService.showdata.next(product)
+    this.router.navigateByUrl('/product/'+id);
+
+  }
+  addToCart(product:any){
+    this._productService.cartdata.subscribe(data=>{
+      this.cart=data;
+    });
+    this.cart.push(product);
+    this._productService.cartdata.next(this.cart)
+    console.log(this.cart,this.cart.length);
+    this._productService.cartdatalength.next(this.cart.length);
+  }
+
 }

@@ -1,0 +1,14 @@
+.width-20{
+    width: 40%;
+}
+.head{
+    margin: 0 90px;
+}
+.addtocart{
+    background-color: #f9a826;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -1,59 +1,45 @@
 import { Component,OnInit } from '@angular/core';
 import { CartService } from 'src/app/core/services/cart.service';
 import { Product } from 'src/app/modules/product/model';
+import { ProductService } from 'src/app/modules/product/services/product.service';
 import { MENU } from 'src/app/shared/constant';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styles: [
-    `
-    .top-nav-menu,
-    .bottom-nav-menu {
-      display:flex;
-      align-items:center;
-      gap:5px;
-
-    }
-    .top-nav-menu-item a,
-    .top-nav-menu-item button {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:4px;
-      font-size:1.3rem;
-      text-transform:uppercase;
-      transition:all 0.5s;
-    }
-    .bottom-nav-menu-item a:hover {
-      font-weight:600;
-      border-bottom:4px solid #374151;
-    }
-
-    .active-link {
-      font-weight:600;
-      border-bottom:4px solid #374151;
-    }
-    `
-  ]
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit{
-  cart:Product[]=[];
-  menulist:{title:string;path:string}[]=MENU;
-  isMenu=false;
-  constructor(private cartService:CartService, public authService:AuthService){
+  cartlength=0
+  cart:any;
+  constructor(private ProductService: ProductService,private cartService:CartService, public authService:AuthService){
   }
-  openMenu(){
-    this.isMenu=true;
-  }
-  closeMenu(){
-    this.isMenu=false;
-  }
-  logOut(){
-    this.authService.logout();
-  }
+  total=0;
   ngOnInit(): void {
-    this.cart=this.cartService.getCart;
+  this.ProductService.cartdatalength.subscribe((data:any)=>{
+    this.cartlength=data;
+  })
+  this.ProductService.cartdata.subscribe((data:any)=>{
+    console.log(data)
+    this.cart=data;
+    this.total=0;
+    this.cart.forEach((item:any)=>{
+      this.total=this.total+item.price;
+    })
+  })
+  }
+  clickAbout(){
+    console.log('clicked');
+  }
+  clickServices(){
+    console.log('clicked');
+  }
+  opencart=false;
+  clickCart(){
+    this.opencart=true;
+  }
+  closeNav() {
+    this.opencart=false;
   }
 }
